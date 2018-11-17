@@ -17,10 +17,8 @@ configure_options := \
 	--with-owner=ftn --with-group=news \
 	--without-news \
 	--with-sendmail=/usr/sbin/sendmail \
-	--enable-dbc-history \
-	--disable-desc-dir \
+	--disable-fs-msgid \
 	--enable-aliases-local \
-	--disable-fecho-pass \
 	--enable-af-ansok \
 	--enable-afses \
 	--enable-pid2rd-tid2gtv \
