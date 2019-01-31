@@ -17,7 +17,7 @@ configure_options := \
 	--with-owner=ftn --with-group=news \
 	--without-news \
 	--with-sendmail=/usr/sbin/sendmail \
-	--disable-fs-msgid \
+	--enable-dbc-history \
 	--enable-aliases-local \
 	--enable-af-ansok \
 	--enable-afses \

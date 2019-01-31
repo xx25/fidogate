@@ -303,6 +303,10 @@ DupeCheck
 # (decimal fraction allowed)
 MaxHistory 28
 
+# Maximum allowed compression rate. Used for mailbomb protection.
+# Default: 20
+CompressRate 20
+
 # Kill old messages (date < now - MaxHistory) (= treat as dupe)
 KillOld
 

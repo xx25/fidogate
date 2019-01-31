@@ -258,10 +258,22 @@ int run_unpack(char *cmd_list, char *cmd_unarc, char *archive, char *type)
     FILE *fp;
     char *s;
     int ret;
+    char *p;
+    int compress_rate;
 
 
     debug(5, "cmd - %s, archive - %s", cmd_list, archive);
     str_printf(line, sizeof(line), cmd_list, archive);
+
+    /* Mailbomb protection */
+    if((p = cf_get_string("CompressRate", TRUE)))
+    {
+        compress_rate = atoi(p);
+    } else {
+
+        compress_rate = 20;
+    }
+
 
     if(!(fp = popen(line, R_MODE)))
     {
@@ -277,9 +289,9 @@ int run_unpack(char *cmd_list, char *cmd_unarc, char *archive, char *type)
 	{
 	    if( 58 > *s && *s > 47)
 	    {
-		if(atol(s)/10 > check_size(archive))
+		if(atol(s)/compress_rate > check_size(archive))
 		{
-		    fglog("WARNING: compression archive %s is biggest then 10", archive);
+		    fglog("WARNING: compression rate for the archive %s is more than %d", archive, compress_rate);
 		    return FALSE;
 		}
 	    }
