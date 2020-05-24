@@ -5,6 +5,7 @@
  *  March 06, 2016 Yauheni Kaliuta
  *
  */
+#include "fidogate.h"
 #include <cgreen/cgreen.h>
 #include <stdio.h>
 
@@ -68,7 +69,7 @@ Ensure(getstring_reads_empty_file)
 
     n = pkt_get_string(f, buf, sizeof(buf));
 
-    assert_that(n, is_equal_to(ERROR));
+    assert_that(n, is_equal_to(0));
 }
 
 Ensure(getstring_handles_eof)
@@ -80,8 +81,7 @@ Ensure(getstring_handles_eof)
 
     n = pkt_get_string(f, buf, sizeof(buf));
 
-    /* since no 0 in the end */
-    assert_that(n, is_equal_to(ERROR));
+    assert_that(n, is_equal_to(file_len));
 }
 
 Ensure(getstring_handles_small_buffer)
@@ -95,7 +95,7 @@ Ensure(getstring_handles_small_buffer)
 
     n = pkt_get_string(f, buf, buf_len);
 
-    assert_that(n, is_equal_to(ERROR));
+    assert_that(n, is_equal_to(strlen(str) + 1));
     assert_that(buf + buf_len,
 		is_equal_to_string(exp + buf_len));
 }

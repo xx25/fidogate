@@ -22,7 +22,6 @@ configure_options := \
 	--enable-af-ansok \
 	--enable-afses \
 	--enable-pid2rd-tid2gtv \
-	--enable-sep-pkt
 
 override_dh_auto_test:
 
@@ -32,7 +31,10 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	dh_auto_build
+<<<<<<< HEAD
 	$(MAKE) -C src/charset charset.bin
+=======
+>>>>>>> 460e4543e4b2bd0d26e3845712b6fe09cfa94e90
 
 override_dh_auto_install:
 	dh_auto_install
@@ -51,7 +53,10 @@ override_dh_auto_install:
 			$(BUILDROOT)/etc/postfix/master.cf-$(PACKAGE)
 	install -m 644 doc/mailer/postfix/transport \
 			$(BUILDROOT)/etc/postfix/transport-$(PACKAGE)
+<<<<<<< HEAD
 	install -m 644 src/charset/charset.bin \
 		$(BUILDROOT)/usr/lib/fidogate
+=======
+>>>>>>> 460e4543e4b2bd0d26e3845712b6fe09cfa94e90
 %:
 	dh $@ 

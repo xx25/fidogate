@@ -2,7 +2,6 @@
 /*****************************************************************************
  * FIDOGATE --- Gateway UNIX Mail/News <-> FIDO NetMail/EchoMail
  *
- * $Id: xalloc.c,v 5.2 2004/11/23 00:50:40 anray Exp $
  *
  * Safe memory allocation functions
  *
@@ -24,7 +23,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with FIDOGATE; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,13 +31,10 @@
 
 #include "fidogate.h"
 
-
 /*
  * Global buffer for temporary usage
  */
 char buffer[BUFFERSIZE];
-
-
 
 /*
  * xmalloc(), xrealloc()  ---  safe versions of malloc() and realloc()
@@ -47,29 +43,27 @@ void *xmalloc(int size)
 {
     char *p;
 
-    if( (p = malloc(size)) )
-	return p;
+    if ((p = malloc(size)))
+        return p;
     fprintf(stderr, "Memory exhausted.");
     exit(EX_OSERR);
 
     /**NOT REACHED**/
     return NULL;
 }
-
 
 void *xrealloc(void *ptr, int size)
 {
     char *p;
 
-    if( (p = realloc(ptr, size)) )
-	return p;
+    if ((p = realloc(ptr, size)))
+        return p;
     fprintf(stderr, "Memory exhausted.");
     exit(EX_OSERR);
 
     /**NOT REACHED**/
     return NULL;
 }
-
 
 /*
  * xfree() --- free() with check for NULL pointer (is safe according to
@@ -77,10 +71,9 @@ void *xrealloc(void *ptr, int size)
  */
 void xfree(void *p)
 {
-    if(p)
-	free(p);
+    if (p)
+        free(p);
 }
-
 
 /*
  * strsave()  ---  make a copy of a string
@@ -90,8 +83,7 @@ char *strsave(char *s)
     char *p = NULL;
     size_t len;
 
-    if(s)
-    {
+    if (s) {
         len = strlen(s) + 1;
         p = xmalloc(len);
         str_copy(p, len, s);
@@ -99,15 +91,14 @@ char *strsave(char *s)
     return p;
 }
 
-
 char *strsave2(char *s1, char *s2)
 {
     char *p;
     size_t len;
 
-    if(!s1 || !s2)
-	return NULL;
-    
+    if (!s1 || !s2)
+        return NULL;
+
     len = strlen(s1) + strlen(s2) + 1;
     p = xmalloc(len);
     str_copy2(p, len, s1, s2);
@@ -121,21 +112,21 @@ void exit_free(void)
     debug(9, "passwd_free()");
 
     hosts_free();
-    debug(9, "hosts_free()"); 
+    debug(9, "hosts_free()");
 
-    uplinks_free(); 
-    debug(9, "uplinks_free()"); 
+    uplinks_free();
+    debug(9, "uplinks_free()");
 
-    areasbbs_free(); 
-    debug(9, "areasbbs_free()"); 
+    areasbbs_free();
+    debug(9, "areasbbs_free()");
 
-    config_free(); 
-    debug(9, "config_free()"); 
+    config_free();
+    debug(9, "config_free()");
 
 #ifdef FTN_ACL
     acl_ftn_free();
-    debug(9, "acl_ftn_free()"); 
-#endif /* FTN_ACL */
+    debug(9, "acl_ftn_free()");
+#endif                          /* FTN_ACL */
     charset_free();
-    debug(9, "charset_free()"); 
+    debug(9, "charset_free()");
 }

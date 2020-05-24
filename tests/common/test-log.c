@@ -21,14 +21,16 @@ static const char errno_log_msg[]  = "$some log";
 static char config_file[] = "mocked_file";
 static char config_stdout[] = "stdout";
 
+#if defined(HAVE_SYSLOG) && defined(HAVE_SYSLOG_H)
 static int syslog_debug_level = -1;
+#endif
 
 static FILE *dummy_fp = (FILE *)0x12345678;
 
 #include "test-log-api.c"
 
 /* mocks */
-char *date_buf(char *buf, size_t len, char *fmt, time_t *t)
+char *date_buf(char *buf, size_t len, char *fmt, time_t *t, long tz)
 {
     strncpy(buf, date_const, len);
     buf[len - 1] = '\0';

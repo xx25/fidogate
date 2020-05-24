@@ -2,7 +2,6 @@
 /*****************************************************************************
  * FIDOGATE --- Gateway UNIX Mail/News <-> FIDO NetMail/EchoMail
  *
- * $Id: sequencer.c,v 5.2 2004/11/23 00:50:40 anray Exp $
  *
  * Number sequencer using sequence file in VARDIR
  *
@@ -24,15 +23,13 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with FIDOGATE; see the file COPYING.  If not, write to the Free
  * Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  *****************************************************************************/
 
 #include "fidogate.h"
-
-
 
 /*
  * Sequencer: read number from file and increment it
@@ -42,7 +39,6 @@ long sequencer(char *seqname)
     return sequencer_nx(seqname, TRUE);
 }
 
-
 long sequencer_nx(char *seqname, int err_abort)
 {
     char filename[MAXPATH];
@@ -51,46 +47,43 @@ long sequencer_nx(char *seqname, int err_abort)
 
     /* Open file, create if necessary */
     BUF_EXPAND(filename, seqname);
-    if( (fp = fopen(filename, RP_MODE)) == NULL )
-	if(errno == ENOENT)
-	{
-	    if( !(fp = fopen(filename, WP_MODE)))
-	    {
-		fopen(cf_p_seq_pack(), RP_MODE);
-		if(errno == ENOENT)
-		{
-		    mkdir(cf_p_seq_pack(), DIR_MODE);
-		    fp = fopen(filename, WP_MODE);
-		}
-		else
-		    return ERROR;
-		    
-	    }
-	}
-	    
-    if(fp == NULL)
-    {
-	if(err_abort) 
-	{
-	    fglog("$ERROR: can't access sequencer file %s", filename);
-	    exit(EX_OSFILE);
-	}
-	else
-	    return ERROR;
+    if ((fp = fopen(filename, RP_MODE)) == NULL)
+        if (errno == ENOENT) {
+            if (!(fp = fopen(filename, WP_MODE))) {
+                fp = fopen(cf_p_seq_pack(), RP_MODE);
+                if (fp == NULL) {
+                    if (errno == ENOENT) {
+                        mkdir(cf_p_seq_pack(), DIR_MODE);
+                        fp = fopen(filename, WP_MODE);
+                    } else
+                        return ERROR;
+                } else {
+                    fclose(fp);
+                    return ERROR;
+                }
+            }
+        }
+
+    if (fp == NULL) {
+        if (err_abort) {
+            fglog("$ERROR: can't access sequencer file %s", filename);
+            exit(EX_OSFILE);
+        } else
+            return ERROR;
     }
-    
+
     /* Lock file, get number and increment it */
     lock_file(fp);
 
     /* filename[] is also used as a buffer for reading the seq value */
-    if(fgets(filename, sizeof(filename), fp))
-	seqn = atol(filename);
+    if (fgets(filename, sizeof(filename), fp))
+        seqn = atol(filename);
     else
-	seqn = 0;
+        seqn = 0;
     seqn++;
-    if(seqn < 0)
-	seqn = 0;
-    
+    if (seqn < 0)
+        seqn = 0;
+
     rewind(fp);
     fprintf(fp, "%ld\n", seqn);
     rewind(fp);
@@ -98,4 +91,4 @@ long sequencer_nx(char *seqname, int err_abort)
     fclose(fp);
 
     return seqn;
-}		
+}
